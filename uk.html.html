@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK ENGLISH SKILLS - مركز تعليم اللغة الإنجليزية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ukYellow: '#FFD700', // لون أصفر بريطاني فخم وساطع
+                        ukDark: '#0F172A',   // أزرق داكن أكاديمي
+                        ukNavy: '#1E293B',   // أزرق فاتح قليلاً للعناصر
+                        ukRed: '#C8102E',    // أحمر بريطاني خفيف للاكسنت
+                        ukBlue: '#012169'    // أزرق ملكي بريطاني
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* تأثيرات الانتقال والتدرجات */
+        .hero-gradient {
+            background: linear-gradient(135deg, #0F172A 0%, #012169 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(255, 215, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* نافذة الإشعارات التفاعلية (Modal) */
+        .modal-overlay {
+            background-color: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-ukYellow selection:text-ukDark">
+
+    <!-- نافذة الإشعارات / حجز الدورات التفاعلية -->
+    <div id="actionModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-center transform scale-95 transition-transform duration-300 relative border-t-4 border-ukYellow">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-ukDark text-xl font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modalIcon" class="w-16 h-16 bg-ukYellow/20 text-ukYellow rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-ukDark mb-2">تأكيد الطلب</h3>
+            <p id="modalMessage" class="text-slate-600 mb-6 leading-relaxed">تم استلام طلبك بنجاح! سيتواصل معك فريق الاستشارات الأكاديمية في أقرب وقت.</p>
+            <button onclick="closeModal()" class="w-full bg-ukDark hover:bg-ukBlue text-ukYellow font-bold py-3 px-6 rounded-xl transition duration-200 shadow-lg">
+                حسناً، شكراً لك
+            </button>
+        </div>
+    </div>
+
+    <!-- رأس الصفحة (Header) -->
+    <header class="sticky top-0 z-40 bg-ukDark/95 backdrop-blur-md border-b border-slate-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- الشعار مع علم بريطانيا -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 bg-ukBlue rounded-xl flex items-center justify-center shadow-md border border-ukYellow/40 group-hover:scale-105 transition-transform overflow-hidden relative">
+                    <!-- أيقونة تعبيرية لعلم بريطانيا مبسطة -->
+                    <div class="absolute inset-0 bg-ukBlue"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fa-solid fa-crown text-ukYellow text-lg z-10"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl sm:text-2xl font-black tracking-wider text-white block">UK ENGLISH <span class="text-ukYellow">SKILLS</span></span>
+                    <span class="text-[10px] tracking-widest text-slate-400 uppercase font-semibold block">British Language Center</span>
+                </div>
+            </a>
+
+            <!-- قائمة التنقل لأجهزة سطح المكتب -->
+            <nav class="hidden md:flex items-center gap-8 font-semibold text-sm">
+                <a href="#home" class="text-white hover:text-ukYellow transition-colors">الرئيسية</a>
+                <a href="#about" class="text-slate-300 hover:text-ukYellow transition-colors">من نحن</a>
+                <a href="#courses" class="text-slate-300 hover:text-ukYellow transition-colors">الدورات التدريبية</a>
+                <a href="#qr-section" class="text-slate-300 hover:text-ukYellow transition-colors">مسح الـ QR</a>
+                <a href="#contact" class="text-slate-300 hover:text-ukYellow transition-colors">تواصل معنا</a>
+            </nav>
+
+            <!-- زر الإجراء السريع في الهيدر -->
+            <div class="hidden md:flex items-center gap-4">
+                <button onclick="openModal('تحديد المستوى المجاني', 'أهلاً بك! يرجى الاستعداد لإجراء اختبار تحديد المستوى المجاني مع خبير بريطاني معتمد.')" class="bg-ukYellow hover:bg-yellow-400 text-ukDark font-bold px-5 py-2.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-question"></i>
+                    اختبار مجاني
+                </button>
+            </div>
+
+            <!-- زر القائمة للجوال (Mobile Menu Button) -->
+            <button id="mobileMenuBtn" class="md:hidden text-ukYellow text-2xl p-2 focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- القائمة المنسدلة للجوال -->
+        <div id="mobileMenu" class="hidden md:hidden bg-ukDark border-t border-slate-800 px-6 py-4 space-y-4 shadow-xl">
+            <a href="#home" class="block text-white hover:text-ukYellow py-2 font-medium border-b border-slate-800">الرئيسية</a>
+            <a href="#about" class="block text-slate-300 hover:text-ukYellow py-2 font-medium border-b border-slate-800">من نحن</a>
+            <a href="#courses" class="block text-slate-300 hover:text-ukYellow py-2 font-medium border-b border-slate-800">الدورات التدريبية</a>
+            <a href="#qr-section" class="block text-slate-300 hover:text-ukYellow py-2 font-medium border-b border-slate-800">مسح الـ QR</a>
+            <a href="#contact" class="block text-slate-300 hover:text-ukYellow py-2 font-medium">تواصل معنا</a>
+            <button onclick="openModal('تحديد المستوى المجاني', 'أهلاً بك! يرجى الاستعداد لإجراء اختبار تحديد المستوى المجاني مع خبير بريطاني معتمد.'); toggleMobileMenu();" class="w-full bg-ukYellow text-ukDark font-bold py-3 rounded-xl shadow mt-2">
+                اختبار مجاني
+            </button>
+        </div>
+    </header>
+
+    <!-- قسم الترحيب (Hero Section) -->
+    <section id="home" class="hero-gradient text-white relative overflow-hidden py-20 lg:py-32">
+        <!-- دوائر خلفية جمالية -->
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-ukYellow/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-ukBlue/40 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- النصوص الترحيبية -->
+                <div class="text-right space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-ukYellow/10 border border-ukYellow/30 text-ukYellow px-4 py-2 rounded-full text-sm font-semibold shadow-inner">
+                        <i class="fa-solid fa-award"></i>
+                        <span>المرجع الأول لتعلم اللغة الانجليزية باللكنة البريطانية الأصيلة</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                        أتقن اللغة الإنجليزية بثقة وبطريقة <span class="text-ukYellow underline decoration-ukYellow/50">بريطانية معتمدة</span>
+                    </h1>
+                    
+                    <p class="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-xl">
+                        ارتقِ بمهاراتك اللغوية مع نخبة من الخبراء والمعلمين الناطقين الأصليين. برامج مخصصة للمحادثة، الأعمال، والتحضير لاختبارات الإيلتس وفق أعلى المعايير الأكاديمية.
+                    </p>
+
+                    <!-- أزرار الحث على اتخاذ إجراء (CTA) -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button onclick="openModal('تسجيل جديد', 'شكراً لرغبتك في الانضمام إلينا! تم تفعيل طلبك وسيتصل بك مستشارنا التعليمي خلال ساعة لتحديد البرنامج المناسب لك.')" class="bg-ukYellow hover:bg-yellow-400 text-ukDark font-extrabold text-base px-8 py-4 rounded-2xl shadow-xl transition transform hover:-translate-y-1 text-center flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-user-plus text-lg"></i>
+                            سجل الآن في الدورات
+                        </button>
+                        <button onclick="openModal('حجز استشارة مجانية', 'تم تسجيل طلبك للحصول على استشارة مجانية فورية عبر واتساب. جاري تحويلك للمستشار المختص.')" class="bg-transparent hover:bg-white/10 text-white border-2 border-slate-600 hover:border-ukYellow font-bold text-base px-8 py-4 rounded-2xl transition text-center flex items-center justify-center gap-3">
+                            <i class="fa-brands fa-whatsapp text-green-400 text-xl"></i>
+                            استشارة واتساب مجانية
+                        </button>
+                    </div>
+
+                    <!-- إحصائيات سريعة -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800 mt-8">
+                        <div>
+                            <span class="block text-2xl sm:text-3xl font-black text-ukYellow">+2,000</span>
+                            <span class="text-slate-400 text-xs sm:text-sm">طالب وطالبة متخرج</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl sm:text-3xl font-black text-ukYellow">100%</span>
+                            <span class="text-slate-400 text-xs sm:text-sm">معايير بريطانية</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl sm:text-3xl font-black text-ukYellow">10+</span>
+                            <span class="text-slate-400 text-xs sm:text-sm">سنوات خبرة تعليمية</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- صورة / تصميم بطاقة تفاعلية مميزة -->
+                <div class="relative flex justify-center">
+                    <div class="relative w-full max-w-md bg-slate-900/80 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md">
+                        
+                        <!-- عنصر تزييني علم بريطانيا -->
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-ukYellow rounded-2xl s    hadow-lg flex items-center justify-center text-ukDark text-2xl font-black transform rotate-12">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white mb-2">ابدأ رحلتك اليوم</h3>
+                        <p class="text-slate-400 text-sm mb-6">احصل على تقييم شامل لمستواك في اللغة الإنجليزية مجاناً.</p>
+
+                        <!-- نموذج سريع مصغر -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">الاسم الكامل</label>
+                                <input type="text" id="quickName" placeholder="أدخل اسمك الكريم" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-ukYellow transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">رقم الهاتف / واتساب</label>
+                                <input type="tel" id="quickPhone" placeholder="009627xxxxxxxx" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-ukYellow transition">
+                            </div>
+                            <button onclick="submitQuickForm()" class="w-full bg-ukYellow hover:bg-yellow-400 text-ukDark font-bold py-3.5 rounded-xl shadow-lg transition duration-200">
+                                احجز مستواك الآن
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <span class="text-xs text-slate-400 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-ukYellow"></i>
+                                بياناتك محفوظة بأمان ولن يتم مشاركتها أبداً
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم من نحن (About Section) -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-ukBlue font-bold tracking-wider uppercase text-sm bg-blue-50 px-3 py-1 rounded-full border border-blue-100">لماذا UK English Skills؟</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-ukDark mt-3 mb-4">بيئة أكاديمية متكاملة تصنع مستقبلك المهني والشخصي</h2>
+                <p class="text-slate-600 leading-relaxed">نحن لا نُعلّم القواعد فحسب، بل نصنع متحدثاً واثقاً يتمتع بلكنة واضحة ومهارات تواصل عالمية.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- ميزة 1 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-14 h-14 bg-ukYellow/20 text-ukDark rounded-2xl flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-chalkboard-user text-ukBlue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-ukDark mb-3">أساتذة ماهرون في التدريس</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">طاقم تدريس يحمل شهادات دولية عليا (CELTA / DELTA) وخبرة واسعة في تدريس غير الناطقين بالإنجليزية.</p>
+                </div>
+
+                <!-- ميزة 2 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-14 h-14 bg-ukYellow/20 text-ukDark rounded-2xl flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-comments text-ukBlue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-ukDark mb-3">تركيز مكثف على المحادثة</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">جلسات تفاعلية حية ومحاكاة لمواقف الحياة اليومية و بيئة العمل الحقيقية لكسر حاجز الخوف تماماً.</p>
+                </div>
+
+                <!-- ميزة 3 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-14 h-14 bg-ukYellow/20 text-ukDark rounded-2xl flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-certificate text-ukBlue"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-ukDark mb-3">شهادات معتمدة دولياً</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">احصل على شهادة تخرج رسمية معتمدة من مركزنا وموثقة، تفتح لك أبواب الشركات الكبرى وفرص السفر.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الدورات التدريبية (Courses Cards) -->
+    <section id="courses" class="py-20 bg-slate-100 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-ukBlue font-bold tracking-wider uppercase text-sm bg-white px-3 py-1 rounded-full border border-slate-200">برامجنا الأكاديمية</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-ukDark mt-3 mb-4">اختر الدورة المناسبة لطموحك وهدفك القادم</h2>
+                <p class="text-slate-600 leading-relaxed">دورات مصممة بعناية لتناسب كافة المستويات من المبتدئ وحتى الاحتراف الكامل.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- كورس 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-md card-hover border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-48 bg-ukDark overflow-hidden flex items-center justify-center">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-ukDark to-ukBlue opacity-90"></div>
+                            <div class="absolute top-4 right-4 bg-ukYellow text-ukDark text-xs font-black px-3 py-1 rounded-full">
+                                الأكثر طلباً
+                            </div>
+                            <i class="fa-solid fa-globe text-6xl text-ukYellow/30 relative z-10"></i>
+                            <h3 class="absolute bottom-4 right-6 text-2xl font-bold text-white z-10">اللغة الإنجليزية العامة</h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                برنامج شامل يغطي القواعد، الاستماع، القراءة، والكتابة بأسلوب تفاعلي ممتع وبسيط للمبتدئين والمتوسطين.
+                            </p>
+                            <ul class="space-y-2 text-xs font-semibold text-slate-700">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> تطوير مهارات النطق السليم</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> بناء حصيلة مفردات واسعة</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> تدريبات عملية مستمرة</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <button onclick="openModal('حجز دورة الإنجليزية العامة', 'يسعدنا اختيارك لدورة اللغة الإنجليزية العامة! سنقوم بتسجيلك والتواصل معك لتأكيد تفاصيل المواعيد.')" class="w-full bg-ukDark hover:bg-ukBlue text-ukYellow font-bold py-3 rounded-xl transition shadow">
+                            احجز مقعدك الآن
+                        </button>
+                    </div>
+                </div>
+
+                <!-- كورس 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-md card-hover border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-48 bg-ukDark overflow-hidden flex items-center justify-center">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-ukBlue to-slate-900 opacity-90"></div>
+                            <div class="absolute top-4 right-4 bg-ukYellow text-ukDark text-xs font-black px-3 py-1 rounded-full">
+                                للمحترفين
+                            </div>
+                            <i class="fa-solid fa-briefcase text-6xl text-ukYellow/30 relative z-10"></i>
+                            <h3 class="absolute bottom-4 right-6 text-2xl font-bold text-white z-10">محادثة الأعمال</h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                تعلم لغة الاجتماعات، كتابة رسائل البريد الإلكتروني الرسمية، التفاوض، ومهارات العرض والتقديم المهني.
+                            </p>
+                            <ul class="space-y-2 text-xs font-semibold text-slate-700">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> إنجليزية الشركات والمال والأعمال</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> صياغة الايميلات الاحترافية</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> مهارات إجراء المقابلات الوظيفية</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <button onclick="openModal('حجز دورة محادثة الأعمال', 'شكراً لاختيارك دورة محادثة الأعمال. تم حجز طلبك المبدئي وسنتواصل معك لتحديد الجدول المناسب لعملك.')" class="w-full bg-ukDark hover:bg-ukBlue text-ukYellow font-bold py-3 rounded-xl transition shadow">
+                            احجز مقعدك الآن
+                        </button>
+                    </div>
+                </div>
+
+                <!-- كورس 3 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-md card-hover border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-48 bg-ukDark overflow-hidden flex items-center justify-center">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-slate-900 to-ukBlue opacity-90"></div>
+                            <div class="absolute top-4 right-4 bg-ukYellow text-ukDark text-xs font-black px-3 py-1 rounded-full">
+                                معتمد دولياً
+                            </div>
+                            <i class="fa-solid fa-graduation-cap text-6xl text-ukYellow/30 relative z-10"></i>
+                            <h3 class="absolute bottom-4 right-6 text-2xl font-bold text-white z-10">التحضير لاختبار IELTS</h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                استراتيجيات مجربة ونماذج اختبارات حقيقية لتحقيق الدرجة المطلوبة (Band 7+) في اختبار الآيلتس الأكاديمي أو العام.
+                            </p>
+                            <ul class="space-y-2 text-xs font-semibold text-slate-700">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> حل نماذج امتحانات سابقة</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> استراتيجيات إدارة وقت الامتحان</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-ukYellow"></i> تصحيح مخصص لكتابة المقالات</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <button onclick="openModal('حجز التحضير لاختبار IELTS', 'أهلاً بك! تم استلام طلبك للتحضير لاختبار الإيلتس. سيزودك مستشارنا بخطة التدريب المكثفة.')" class="w-full bg-ukDark hover:bg-ukBlue text-ukYellow font-bold py-3 rounded-xl transition shadow">
+                            احجز مقعدك الآن
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم تفاعلي لرمز الاستجابة السريعة (QR Code Section) -->
+    <section id="qr-section" class="py-20 bg-ukDark text-white relative overflow-hidden">
+        <!-- تزيين خلفية -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-5 pointer-events-none flex items-center justify-center text-9xl font-black">
+            UK
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                
+                <!-- تفاصيل الرمز -->
+                <div class="space-y-6 text-right">
+                    <span class="bg-ukYellow/10 text-ukYellow border border-ukYellow/30 text-xs font-bold px-3 py-1.5 rounded-full inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-mobile-screen"></i> تطبيق الهاتف والخدمة السريعة
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white leading-tight">
+                        امسح الرمز بكاميرا هاتفك لحجز استشارة فورية
+                    </h2>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        احصل على خصم حصري 20% على دورتك الأولى عند مسح الرمز وتحميل تطبيقنا التعليمي أو التواصل الفوري عبر واتساب من خلال الهاتف الذكي.
+                    </p>
+                    <div class="flex items-center gap-4 pt-2">
+                        <button onclick="openModal('تفعيل الخصم الفوري', 'تم تفعيل كود الخصم الحصري (UK20) بنجاح لحسابك! تواصل معنا عبر واتساب لتأكيد الاستفادة منه.')" class="bg-ukYellow hover:bg-yellow-400 text-ukDark font-bold px-6 py-3 rounded-xl shadow transition text-sm">
+                            <i class="fa-solid fa-tag ml-2"></i> احصل على الخصم
+                        </button>
+                    </div>
+                </div>
+
+                <!-- شكل QR Code احترافي وهمي -->
+                <div class="flex flex-col items-center justify-center bg-white p-6 rounded-2xl shadow-xl text-slate-800">
+                    <div class="w-48 h-48 bg-slate-100 border-4 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center relative p-4 group">
+                        <!-- رسم شكل QR افتراضي تعبيري باستخدام أيقونات -->
+                        <i class="fa-solid fa-qrcode text-7xl text-ukDark mb-2"></i>
+                        <span class="text-[11px] font-bold text-slate-500 text-center">UK ENGLISH SKILLS QR</span>
+                        
+                        <!-- طبقة تفاعلية عند المرور -->
+                        <div class="absolute inset-0 bg-ukDark/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col items-center justify-center text-white p-2 text-center">
+                            <i class="fa-solid fa-camera text-2xl text-ukYellow mb-1"></i>
+                            <p class="text-xs font-bold">جاهز للمسح بكاميرا الهاتف</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-slate-500 font-semibold mt-4">قم بتوجيه الكاميرا هنا للتواصل المباشر</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم وسائل التواصل والفوتر (Social Media & Contact Footer) -->
+    <section id="contact" class="bg-slate-900 text-white pt-20 pb-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 pb-16 border-b border-slate-800">
+                
+                <!-- عمود الشعار ونبذة -->
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-ukBlue rounded-xl flex items-center justify-center border border-ukYellow/40">
+                            <i class="fa-solid fa-crown text-ukYellow"></i>
+                        </div>
+                        <span class="text-lg font-black tracking-wider text-white">UK ENGLISH <span class="text-ukYellow">SKILLS</span></span>
+                    </div>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                        الوجهة الأولى لاحتراف اللغة الإنجليزية باللكنة البريطانية الأصلية. دورات معتمدة ومدربون ماهرون لضمان نجاحك.
+                    </p>
+                </div>
+
+                <!-- عمود روابط سريعة -->
+                <div class="space-y-4">
+                    <h4 class="text-base font-bold text-ukYellow">روابط سريعة</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#home" class="hover:text-ukYellow transition">الرئيسية</a></li>
+                        <li><a href="#about" class="hover:text-ukYellow transition">من نحن</a></li>
+                        <li><a href="#courses" class="hover:text-ukYellow transition">الدورات التدريبية</a></li>
+                        <li><a href="#qr-section" class="hover:text-ukYellow transition">الرمز السريع QR</a></li>
+                    </ul>
+                </div>
+
+                <!-- عمود معلومات الاتصال -->
+                <div class="space-y-4">
+                    <h4 class="text-base font-bold text-ukYellow">معلومات الاتصال</h4>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-location-dot text-ukYellow"></i>
+                            <span>غزة الرمال , عمارة الحويطي الطابق الرابع</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-ukYellow"></i>
+                            <span dir="ltr">+970 59020138</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-ukYellow"></i>
+                            <span>uk.englishskills@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- عمود التواصل الاجتماعي -->
+                <div class="space-y-4">
+                    <h4 class="text-base font-bold text-ukYellow">تابعنا على منصاتنا</h4>
+                    <p class="text-slate-400 text-xs">ابق على اطلاع بأحدث النصائح والعروض اللغوية الحصرية:</p>
+                    
+                    <!-- الأيقونات التفاعلية (قم بتغيير الروابط هنا بسهولة) -->
+                    <div class="flex items-center gap-3 pt-2">
+                        <!-- رابط فيسبوك Facebook -->
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-10 h-10 bg-slate-800 hover:bg-ukBlue text-white rounded-xl flex items-center justify-center transition shadow-md hover:scale-110">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <!-- رابط انستغرام Instagram -->
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-10 h-10 bg-slate-800 hover:bg-pink-600 text-white rounded-xl flex items-center justify-center transition shadow-md hover:scale-110">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <!-- رابط واتساب WhatsApp -->
+                        <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-10 h-10 bg-slate-800 hover:bg-green-600 text-white rounded-xl flex items-center justify-center transition shadow-md hover:scale-110">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <!-- رابط يوتيوب YouTube -->
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-10 h-10 bg-slate-800 hover:bg-red-600 text-white rounded-xl flex items-center justify-center transition shadow-md hover:scale-110">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- حقوق النشر -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+                <p>جميع الحقوق محفوظة &copy; 2026 - UK English Skills Center</p>
+                <p class="mt-2 sm:mt-0">تصميم وتطوير حمزة اليعقوبي</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- البرمجيات التفاعلية (JavaScript) -->
+    <script>
+        // تفعيل قائمة الهواتف الذكية (Mobile Menu Toggle)
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // إغلاق القائمة عند اختيار أي رابط في الجوال
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // دوال التحكم بالنافذة المنتقلة (Modal) لإبقاء المستخدم متفاعلاً بدلاً من استخدام alert()
+        const actionModal = document.getElementById('actionModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        function openModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            actionModal.classList.remove('hidden');
+            setTimeout(() => {
+                actionModal.classList.remove('opacity-0');
+                actionModal.querySelector('div').classList.remove('scale-95');
+                actionModal.querySelector('div').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            actionModal.classList.add('opacity-0');
+            actionModal.querySelector('div').classList.remove('scale-100');
+            actionModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                actionModal.classList.add('hidden');
+            }, 300);
+        }
+
+        // التعامل مع النموذج السريع في قسم الترحيب
+        function submitQuickForm() {
+            const name = document.getElementById('quickName').value.trim();
+            const phone = document.getElementById('quickPhone').value.trim();
+
+            if (name === "" || phone === "") {
+                openModal('تنبيه هام', 'يرجى إدخال الاسم ورقم الهاتف بشكل صحيح لنتمكن من التواصل معك.');
+                return;
+            }
+
+            openModal('تم بنجاح!', 'شكراً يا ' + name + '، تم استلام بياناتك بنجاح وسيتواصل معك المستشار التعليمي عبر الرقم ' + phone + ' قريباً جداً.');
+            
+            // تفريغ الحقول
+            document.getElementById('quickName').value = '';
+            document.getElementById('quickPhone').value = '';
+        }
+
+        // إغلاق النافذة عند الضغط خارجها
+        actionModal.addEventListener('click', (e) => {
+            if (e.target === actionModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
